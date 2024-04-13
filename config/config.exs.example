@@ -9,7 +9,12 @@ config :bot,
 
 config :nostrum,
   token: "DISCORD_BOT_TOKEN_HERE"
+  gateway_intents: [
+    :guilds,
+    :guild_messages,
+    :message_content
+  ]
 
 config :logger, :console,
-  format: "$time $metadata[$level] $levelpad$message\n",
+  format: "$time $metadata[$level] $message\n",
   level: :info
