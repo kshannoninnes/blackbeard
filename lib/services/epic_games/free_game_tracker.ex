@@ -1,12 +1,12 @@
-defmodule Bot.Services.EpicGames.TrackerGenserv do
+defmodule Bot.Services.EpicGames.FreeGameTracker do
   use GenServer
   require Logger
 
-  alias Bot.Services.EpicGames.Discord
-  alias Bot.Services.EpicGames.GameJsonParser
+  alias Bot.Services.Discord
+  alias Bot.Services.EpicGames.Api
 
-  @url "https://store-site-backend-static-ipv4.ak.epicgames.com/freeGamesPromotions"
   @default_game_id -1
+  @channel_id 591208547316924416
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -28,13 +28,17 @@ defmodule Bot.Services.EpicGames.TrackerGenserv do
     Process.send_after(self(), :check_games, :timer.seconds(15))
   end
 
-
   def update_free_game(game_id) do
-    game_info = Req.get!(@url) |> GameJsonParser.parse_game_info()
+    game_info = Api.get_free_game()
 
     unless game_id == game_info[:id] do
       Logger.info("New free game found, posting in discord")
-      Discord.send_embed(game_info[:title], game_info[:imageUrl])
+      Discord.post_free_game(@channel_id, %{
+        title: game_info[:title],
+        image: game_info[:image],
+        description: game_info[:description],
+        url: game_info[:url]
+      })
     end
 
     game_info[:id]
