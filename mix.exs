@@ -23,7 +23,8 @@ defmodule Bot.MixProject do
   defp deps do
     [
       {:nostrum, "~> 0.8"},
-      {:nosedrum, "~> 0.6"}
+      {:nosedrum, "~> 0.6"},
+      {:req, "~> 0.4"}
     ]
   end
 end

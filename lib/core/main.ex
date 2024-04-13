@@ -5,7 +5,8 @@ defmodule Bot.Core.Main do
   def start(_type, _args) do
     children = [
       Nosedrum.Storage.Dispatcher,
-      Bot.Core.Consumer
+      Bot.Core.Consumer,
+      Bot.Services.EpicGames.TrackerGenserv
     ]
 
     options = [strategy: :one_for_one, name: Bot.Supervisor]
