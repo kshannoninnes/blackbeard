@@ -1,6 +1,6 @@
-# ElixirBot
+# Blackbeard
 
-**A Discord bot skeleton written in Elixir. Designed as a basic bot which users can easily write commands for with minimal Elixir knowledge**
+**A Discord bot written in Elixir. Currently barebones, but there are plans to add functionality useful to me. Not really intended to be used by third-parties**
 
 ## Usage
 
