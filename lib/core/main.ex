@@ -6,7 +6,7 @@ defmodule Bot.Core.Main do
     children = [
       Nosedrum.Storage.Dispatcher,
       Bot.Core.Consumer,
-      Bot.Services.EpicGames.FreeGameTracker
+      Bot.Services.EpicGames.Tracker
     ]
 
     options = [strategy: :one_for_one, name: Bot.Supervisor]
