@@ -8,7 +8,7 @@ defmodule Bot.Core.CommandHandler do
   @plugin_filename "./command.list"
 
   def handle_command(interaction) do
-    Logger.info("Received command \"#{interaction.data.name}\" from user #{interaction.user.id}")
+    Logger.info("Received command '#{interaction.data.name}' from user #{interaction.user.username} (id: #{interaction.user.id})")
     Dispatcher.handle_interaction(interaction)
   end
 
@@ -26,7 +26,7 @@ defmodule Bot.Core.CommandHandler do
     end
   end
 
-  def map_to_modules(string_list) do
+  defp map_to_modules(string_list) do
     Logger.debug("Beginning module conversion")
     Enum.map(string_list, fn str ->
       Logger.debug("Converting #{str} to module #{@cmd_root_path}.#{str}")
@@ -35,8 +35,9 @@ defmodule Bot.Core.CommandHandler do
   end
 
   defp register_modules_as_commands(module_list) do
-    Enum.each(module_list, fn module ->
+    Enum.map(module_list, fn module ->
       register_module_as_command(module)
+      Process.sleep(1000) # Running into rate limits, writing my own command handler to bulk add commands
     end)
   end
 

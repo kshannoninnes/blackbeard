@@ -7,6 +7,12 @@ defmodule Bot.Services.EpicGames.Tracker do
   @default_game_id -1
   @default_frequency 5
 
+  def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+
+  def init(_opts) do
+    {:ok, %{game_id: @default_game_id, frequency: @default_frequency}}
+  end
+
   def start(channel_id) do
     _ = GenServer.cast(__MODULE__, {:start, channel_id})
   end
@@ -21,20 +27,13 @@ defmodule Bot.Services.EpicGames.Tracker do
 
   def update_check_frequency(freq) do
     _ = GenServer.cast(__MODULE__, {:update_freq, freq})
-    Logger.info("Updated the check frequency to #{freq}") # Should probably put all this "did the thing" logging in the actual functions
   end
 
-  def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
-  def init(_opts), do: {:ok, nil}
+  def handle_cast({:start, channel_id}, state) do
+    state = Map.put_new(state, :channel_id, channel_id)
+    |> schedule_next_check()
 
-  def handle_cast({:start, channel_id}, _state) do
-    state = %{}
-      |> Map.put(:game_id, @default_game_id)
-      |> Map.put(:frequency, @default_frequency)
-      |> Map.put(:channel_id, channel_id)
-      |> schedule_next_check
-
-      Logger.info("Starting tracking, posting updates in channel #{channel_id}")
+    Logger.info("Started tracking, posting updates in channel #{channel_id}")
 
     {:noreply, state}
   end
@@ -51,10 +50,17 @@ defmodule Bot.Services.EpicGames.Tracker do
   end
 
   def handle_cast({:update_freq, new_freq}, state) do
-    Process.cancel_timer(state[:next_run])
+    state = case state[:next_run] do
+      nil ->
+        Map.put(state, :frequency, new_freq)
 
-    state = Map.put(state, :frequency, new_freq)
-      |> schedule_next_check
+      _ ->
+        Process.cancel_timer(state[:next_run])
+        Map.put(state, :frequency, new_freq)
+        |> schedule_next_check()
+    end
+
+    Logger.debug("Updated the check frequency to #{new_freq} hours")
 
     {:noreply, state}
   end

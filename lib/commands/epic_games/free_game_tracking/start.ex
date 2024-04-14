@@ -12,8 +12,7 @@ defmodule Bot.Commands.EpicGames.FreeGameTracking.Start do
   @impl true
   def command(interaction) do
     Tracker.start(interaction.channel_id)
-
-    [content: "Tracking started in this channel. To change which channel I post in, type `/channel <channel_id>`"]
+    [content: "Tracking started."]
   end
 
   @impl true
