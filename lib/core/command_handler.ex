@@ -36,24 +36,13 @@ defmodule Bot.Core.CommandHandler do
 
   defp register_modules_as_commands(module_list) do
     Enum.map(module_list, fn module ->
-      register_module_as_command(module)
-      Process.sleep(1000) # Running into rate limits, writing my own command handler to bulk add commands
+      Dispatcher.add_command(module.name, module, nil) # This nil represents server_id in the old add_command version
+      Logger.debug("Added module #{module} as command /#{module.name}")
     end)
-  end
 
-  defp register_module_as_command(module) do
-    case length(@server_list) do
-      0 ->
-        Logger.debug("No server IDs specified, registering command #{module.name} globally")
-        Dispatcher.add_command(module.name, module, :global)
-
-      x when x > 0 ->
-        Enum.each(@server_list, fn server ->
-          Logger.debug("Registering module #{module} in server #{server} as command /#{module.name}")
-          Dispatcher.add_command(module.name, module, server)
-        end)
-
-      _ -> Logger.error("Error registering #{module} as command")
-    end
+    Enum.each(@server_list, fn server_id ->
+      Dispatcher.submit_command_registration(server_id)
+      Logger.debug("Successfully registered all commands to #{server_id}")
+    end)
   end
 end
