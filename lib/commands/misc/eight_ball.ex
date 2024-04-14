@@ -1,4 +1,4 @@
-defmodule Bot.Commands.Fun.EightBall do
+defmodule Bot.Commands.Misc.EightBall do
   require Logger
   @behaviour Nosedrum.ApplicationCommand
   @responses [

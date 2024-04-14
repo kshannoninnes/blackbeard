@@ -1,4 +1,4 @@
-defmodule Bot.Commands.General.Ping do
+defmodule Bot.Commands.Misc.Ping do
   require Logger
   @behaviour Nosedrum.ApplicationCommand
 
