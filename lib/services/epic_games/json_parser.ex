@@ -3,6 +3,10 @@ defmodule Bot.Services.EpicGames.JsonParser do
     response.body["data"]["Catalog"]["searchStore"]["elements"] |> get_current_free_game
   end
 
+  def parse_game_id(game_info) do
+    game_info["id"]
+  end
+
   def parse_game_title(game_info) do
     game_info["title"]
   end

@@ -8,6 +8,7 @@ defmodule Bot.Services.EpicGames.Api do
     game_info = Req.get!(@free_game_url) |> JsonParser.parse_game_info()
 
     %{
+      id: JsonParser.parse_game_id(game_info),
       title: JsonParser.parse_game_title(game_info),
       image: JsonParser.parse_game_image_url(game_info),
       description: JsonParser.parse_game_description(game_info),
