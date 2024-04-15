@@ -29,9 +29,13 @@ defmodule Bot.Services.EpicGames.Tracker do
     _ = GenServer.cast(__MODULE__, {:update_freq, freq})
   end
 
+  def get_next_check_unix_timestamp() do
+    GenServer.call(__MODULE__, :next_check)
+  end
+
   def handle_cast({:start, channel_id}, state) do
     state = Map.put_new(state, :channel_id, channel_id)
-    |> schedule_next_check()
+    Process.send_after(self(), :check_games, :timer.seconds(1))
 
     Logger.info("Started tracking, posting updates in channel #{channel_id}")
 
@@ -64,6 +68,17 @@ defmodule Bot.Services.EpicGames.Tracker do
 
     {:noreply, state}
   end
+
+  def handle_call(:next_check, _from, state) do
+    next_check = case state[:next_run] do
+      nil -> -1
+      next_run_ref ->
+        Process.read_timer(next_run_ref)
+    end
+
+    {:reply, next_check, state}
+  end
+
 
   def handle_info(:check_games, state) do
     game_id = TrackerHelper.check_for_new_game(state[:game_id], state[:channel_id])
