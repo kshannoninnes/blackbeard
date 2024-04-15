@@ -5,7 +5,7 @@ defmodule Bot.Services.EpicGames.Tracker do
   alias Bot.Services.EpicGames.TrackerHelper
 
   @default_game_id -1
-  @default_frequency 5
+  @default_frequency 6
 
   def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
 
@@ -76,7 +76,7 @@ defmodule Bot.Services.EpicGames.Tracker do
 
   defp schedule_next_check(state) do
     Logger.debug("Scheduling a new game check")
-    next_run = Process.send_after(self(), :check_games, :timer.seconds(state[:frequency]))
+    next_run = Process.send_after(self(), :check_games, :timer.hours(state[:frequency]))
     Map.put(state, :next_run, next_run)
   end
 end
