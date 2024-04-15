@@ -31,7 +31,7 @@ defmodule Bot.Services.EpicGames.Tracker do
 
   def handle_cast({:start, channel_id}, state) do
     state = Map.put_new(state, :channel_id, channel_id)
-    |> schedule_next_check()
+    Process.send_after(self(), :check_games, :timer.seconds(1))
 
     Logger.info("Started tracking, posting updates in channel #{channel_id}")
 
