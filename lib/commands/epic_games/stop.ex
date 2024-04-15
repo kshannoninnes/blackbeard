@@ -1,4 +1,4 @@
-defmodule Bot.Commands.EpicGames.FreeGameTracking.Stop do
+defmodule Bot.Commands.EpicGames.Stop do
   require Logger
   @behaviour Nosedrum.ApplicationCommand
 
