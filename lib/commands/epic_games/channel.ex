@@ -1,4 +1,4 @@
-defmodule Bot.Commands.EpicGames.FreeGameTracking.Channel do
+defmodule Bot.Commands.EpicGames.Channel do
   require Logger
   @behaviour Nosedrum.ApplicationCommand
 
