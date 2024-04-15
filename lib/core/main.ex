@@ -6,7 +6,7 @@ defmodule Bot.Core.Main do
     children = [
       Nosedrum.Storage.Dispatcher,
       Bot.Core.Consumer,
-      Bot.Services.EpicGames.TrackerGenserv
+      Bot.Services.EpicGames.Tracker
     ]
 
     options = [strategy: :one_for_one, name: Bot.Supervisor]
@@ -16,10 +16,16 @@ end
 
 defmodule Bot.Core.Consumer do
   use Nostrum.Consumer
+  require Logger
 
-  alias Bot.Core.CommandHandler
+  alias Bot.Core.CommandLoader
+  alias Nosedrum.Storage.Dispatcher
 
-  def handle_event({:READY, _, _}), do: CommandHandler.register_commands()
-  def handle_event({:INTERACTION_CREATE, intr, _}), do: CommandHandler.handle_command(intr)
+  def handle_event({:READY, _, _}), do: CommandLoader.load_commands()
+  def handle_event({:INTERACTION_CREATE, intr, _}) do
+    Logger.info("Received command '#{intr.data.name}' from user #{intr.user.username} (id: #{intr.user.id})")
+    Dispatcher.handle_interaction(intr)
+  end
+
   def handle_event(_), do: :ok
 end
