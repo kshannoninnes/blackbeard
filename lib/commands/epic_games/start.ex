@@ -1,8 +1,8 @@
 defmodule Bot.Commands.EpicGames.Start do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
 
   alias Bot.Services.EpicGames.Tracker
+  alias Bot.Core.Logger
 
   def name(), do: "start"
 
@@ -10,9 +10,10 @@ defmodule Bot.Commands.EpicGames.Start do
   def description(), do: "Start tracking the weekly free game by Epic Games"
 
   @impl true
-  def command(interaction) do
-    Tracker.start(interaction.channel_id)
-    [content: "Tracking started."]
+  def command(intr) do
+    Logger.log_command(intr)
+    Tracker.start(intr.channel_id)
+    [content: "Tracking started"]
   end
 
   @impl true

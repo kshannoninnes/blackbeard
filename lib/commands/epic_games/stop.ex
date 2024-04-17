@@ -1,8 +1,8 @@
 defmodule Bot.Commands.EpicGames.Stop do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
 
   alias Bot.Services.EpicGames.Tracker
+  alias Bot.Core.Logger
 
   def name(), do: "stop"
 
@@ -10,9 +10,10 @@ defmodule Bot.Commands.EpicGames.Stop do
   def description(), do: "Stop tracking the weekly free game by Epic Games"
 
   @impl true
-  def command(_interaction) do
+  def command(intr) do
+    Logger.log_command(intr)
     Tracker.stop()
-    [content: "Tracking stopped."]
+    [content: "Tracking stopped"]
   end
 
   @impl true

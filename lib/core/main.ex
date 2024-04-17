@@ -22,10 +22,7 @@ defmodule Bot.Core.Consumer do
   alias Nosedrum.Storage.Dispatcher
 
   def handle_event({:READY, _, _}), do: CommandLoader.load_commands()
-  def handle_event({:INTERACTION_CREATE, intr, _}) do
-    Logger.info("Received command '#{intr.data.name}' from user #{intr.user.username} (id: #{intr.user.id})")
-    Dispatcher.handle_interaction(intr)
-  end
+  def handle_event({:INTERACTION_CREATE, intr, _}), do: Dispatcher.handle_interaction(intr)
 
   def handle_event(_), do: :ok
 end

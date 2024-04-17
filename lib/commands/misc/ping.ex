@@ -1,6 +1,7 @@
 defmodule Bot.Commands.Misc.Ping do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
+
+  alias Bot.Core.Logger
 
   def name(), do: "ping"
 
@@ -8,7 +9,10 @@ defmodule Bot.Commands.Misc.Ping do
   def description(), do: "Ping the bot to check for lifesigns."
 
   @impl true
-  def command(_interaction), do: [content: "pong!"]
+  def command(intr) do
+    Logger.log_command(intr)
+    [content: "pong!"]
+  end
 
   @impl true
   def type(), do: :slash

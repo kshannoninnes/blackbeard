@@ -1,8 +1,8 @@
 defmodule Bot.Commands.EpicGames.Channel do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
 
   alias Bot.Services.EpicGames.Tracker
+  alias Bot.Core.Logger
 
   def name(), do: "channel"
 
@@ -10,8 +10,9 @@ defmodule Bot.Commands.EpicGames.Channel do
   def description(), do: "Change the channel that free game notifications are posted in"
 
   @impl true
-  def command(interaction) do
-    [%{name: "channel", value: channel}] = interaction.data.options
+  def command(intr) do
+    Logger.log_command(intr)
+    [%{name: "channel", value: channel}] = intr.data.options
 
     Tracker.update_channel(channel)
 
