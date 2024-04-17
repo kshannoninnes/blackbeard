@@ -1,8 +1,8 @@
 defmodule Bot.Commands.EpicGames.Frequency do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
 
   alias Bot.Services.EpicGames.Tracker
+  alias Bot.Core.Logger
 
   def name(), do: "frequency"
 
@@ -10,8 +10,9 @@ defmodule Bot.Commands.EpicGames.Frequency do
   def description(), do: "Change how often the tracker will check for new free games from Epic Games"
 
   @impl true
-  def command(interaction) do
-    [%{name: "frequency", value: frequency}] = interaction.data.options
+  def command(intr) do
+    Logger.log_command(intr)
+    [%{name: "frequency", value: frequency}] = intr.data.options
 
     Tracker.update_check_frequency(frequency)
 

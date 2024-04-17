@@ -1,8 +1,8 @@
 defmodule Bot.Commands.EpicGames.Next do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
 
   alias Bot.Services.EpicGames.Tracker
+  alias Bot.Core.Logger
 
   def name(), do: "next"
 
@@ -10,7 +10,9 @@ defmodule Bot.Commands.EpicGames.Next do
   def description(), do: "Check when the next game check will be"
 
   @impl true
-  def command(_interaction) do
+  def command(intr) do
+    Logger.log_command(intr)
+
     unix_ts = Tracker.get_next_check_unix_timestamp()
 
     response = case unix_ts do
@@ -23,7 +25,7 @@ defmodule Bot.Commands.EpicGames.Next do
         |> DateTime.to_unix()
         "Next check scheduled for <t:#{next_check}>"
 
-      _ -> "Error verifying next check."
+      _ -> "Error verifying next check"
     end
 
     [content: response]

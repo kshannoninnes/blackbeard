@@ -1,5 +1,4 @@
 defmodule Bot.Commands.Misc.EightBall do
-  require Logger
   @behaviour Nosedrum.ApplicationCommand
   @responses [
     "It is certain.",
@@ -24,13 +23,18 @@ defmodule Bot.Commands.Misc.EightBall do
     "Very doubtful."
   ]
 
+  alias Bot.Core.Logger
+
   def name(), do: "8ball"
 
   @impl true
   def description(), do: "Seek the wisdom of AI"
 
   @impl true
-  def command(_interaction), do: [content: Enum.random(@responses)]
+  def command(intr) do
+    Logger.log_command(intr)
+    [content: Enum.random(@responses)]
+  end
 
   @impl true
   def type(), do: :slash
