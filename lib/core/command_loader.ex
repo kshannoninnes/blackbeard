@@ -9,6 +9,7 @@ defmodule Bot.Core.CommandLoader do
   def load_commands() do
     load_command_plugins()
     |> register_commands()
+    Logger.info("Commands loaded")
   end
 
   defp load_command_plugins() do
@@ -33,7 +34,6 @@ defmodule Bot.Core.CommandLoader do
 
   defp get_module(file) do
     pattern = ~r{defmodule \s+ ([^\s]+) }x
-
     contents = File.read!(file)
 
     Regex.scan(pattern, contents, capture: :all_but_first)
