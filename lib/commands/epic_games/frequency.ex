@@ -7,7 +7,8 @@ defmodule Bot.Commands.EpicGames.Frequency do
   def name(), do: "frequency"
 
   @impl true
-  def description(), do: "Change how often the tracker will check for new free games from Epic Games"
+  def description(),
+    do: "Change how often the tracker will check for new free games from Epic Games"
 
   @impl true
   def command(intr) do

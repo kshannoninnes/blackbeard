@@ -4,7 +4,8 @@ defmodule Bot.Services.Discord do
   alias Nostrum.Struct.Embed
 
   def post_free_game(channel_id, content, embed_info) do
-    embed = %Embed{}
+    embed =
+      %Embed{}
       |> Embed.put_title(embed_info[:title])
       |> Embed.put_thumbnail(embed_info[:image])
       |> Embed.put_description(embed_info[:description])

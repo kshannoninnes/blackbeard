@@ -30,6 +30,6 @@ defmodule Bot.Services.EpicGames.JsonParser do
 
       currentPrice == 0 and originalPrice > 0
     end)
-    |> List.first
+    |> List.first()
   end
 end

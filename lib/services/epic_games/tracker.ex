@@ -47,22 +47,24 @@ defmodule Bot.Services.EpicGames.Tracker do
   end
 
   def handle_cast({:update_channel, new_channel}, state) do
-    state =  Map.put(state, :channel_id, new_channel)
+    state = Map.put(state, :channel_id, new_channel)
     Logger.info("Updated channel id to #{new_channel}")
 
     {:noreply, state}
   end
 
   def handle_cast({:update_freq, new_freq}, state) do
-    state = case state[:next_run] do
-      nil ->
-        Map.put(state, :frequency, new_freq)
+    state =
+      case state[:next_run] do
+        nil ->
+          Map.put(state, :frequency, new_freq)
 
-      _ ->
-        Process.cancel_timer(state[:next_run])
-        Map.put(state, :frequency, new_freq)
-        |> schedule_next_check()
-    end
+        _ ->
+          Process.cancel_timer(state[:next_run])
+
+          Map.put(state, :frequency, new_freq)
+          |> schedule_next_check()
+      end
 
     Logger.debug("Updated the check frequency to #{new_freq} hours")
 
@@ -70,20 +72,23 @@ defmodule Bot.Services.EpicGames.Tracker do
   end
 
   def handle_call(:next_check, _from, state) do
-    next_check = case state[:next_run] do
-      nil -> -1
-      next_run_ref ->
-        Process.read_timer(next_run_ref)
-    end
+    next_check =
+      case state[:next_run] do
+        nil ->
+          -1
+
+        next_run_ref ->
+          Process.read_timer(next_run_ref)
+      end
 
     {:reply, next_check, state}
   end
 
-
   def handle_info(:check_games, state) do
     game_id = TrackerHelper.check_for_new_game(state[:game_id], state[:channel_id])
 
-    state = Map.put(state, :game_id, game_id)
+    state =
+      Map.put(state, :game_id, game_id)
       |> schedule_next_check
 
     {:noreply, state}
