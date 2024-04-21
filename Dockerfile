@@ -1,4 +1,5 @@
 FROM elixir:alpine as builder
+LABEL stage=builder
 
 ENV MIX_ENV=prod
 
