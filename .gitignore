@@ -33,3 +33,9 @@ elixir_bot-*.tar
 
 # Production config file should be excluded to prevent potential leaks of discord key
 /config/config.exs
+
+# Personal TODO file
+TODO
+
+# Personal Deploy Script
+deploy.bat

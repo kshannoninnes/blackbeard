@@ -14,7 +14,7 @@ defmodule Bot.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :esshd],
+      extra_applications: [:logger],
       mod: {Bot.Core.Main, []}
     ]
   end
@@ -25,7 +25,7 @@ defmodule Bot.MixProject do
       {:nostrum, "~> 0.8"},
       {:nosedrum,
        git: "https://github.com/kshannoninnes/nosedrum.git",
-       branch: "feature/make-bulk-registration-optional"},
+       branch: "feature/bulk-register-commands"},
       # {:nosedrum, path: "../nosedrum"},
       # {:nosedrum, "~> 0.6"},
       {:req, "~> 0.4"},
