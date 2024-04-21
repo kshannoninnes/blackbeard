@@ -3,16 +3,18 @@ defmodule Bot.Core.CommandLoader do
 
   alias Nosedrum.Storage.Dispatcher
 
-  @cmd_dir Path.join([File.cwd!, "lib", "commands"])
+  @cmd_dir Path.join([File.cwd!(), "lib", "commands"])
   @server_list Application.compile_env(:bot, :guild_ids)
 
   def load_commands() do
     load_command_plugins()
     |> register_commands()
+
+    Logger.info("Commands loaded")
   end
 
   defp load_command_plugins() do
-    Xfile.ls!(@cmd_dir, [recursive: true, filter: &String.ends_with?(&1, ".ex")])
+    Xfile.ls!(@cmd_dir, recursive: true, filter: &String.ends_with?(&1, ".ex"))
     |> Enum.to_list()
     |> Enum.reduce([], fn file, acc ->
       [get_module(file)] ++ acc
@@ -33,7 +35,6 @@ defmodule Bot.Core.CommandLoader do
 
   defp get_module(file) do
     pattern = ~r{defmodule \s+ ([^\s]+) }x
-
     contents = File.read!(file)
 
     Regex.scan(pattern, contents, capture: :all_but_first)
@@ -42,5 +43,5 @@ defmodule Bot.Core.CommandLoader do
     |> string_to_module()
   end
 
-  defp string_to_module(str), do: "Elixir." <> str |> String.to_existing_atom()
+  defp string_to_module(str), do: ("Elixir." <> str) |> String.to_existing_atom()
 end
