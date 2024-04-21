@@ -29,7 +29,8 @@ defmodule Bot.MixProject do
       # {:nosedrum, path: "../nosedrum"},
       # {:nosedrum, "~> 0.6"},
       {:req, "~> 0.4"},
-      {:xfile, "~> 0.4"}
+      {:xfile, "~> 0.4"},
+      {:dotenvy, "~> 0.8.0"}
     ]
   end
 end

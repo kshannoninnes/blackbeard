@@ -1,4 +1,7 @@
 import Config
+import Dotenvy
+
+source!(["config/.env", System.get_env()])
 
 config :bot,
   guild_ids: [
@@ -7,8 +10,9 @@ config :bot,
     # Globally registered commands can take up to an hour to appear in a server
   ]
 
-config :nostrum,
-  token: "DISCORD_BOT_TOKEN_HERE"
+  # Store your bot token in a file called '.env' in /config in 
+  # the format of "DISCORD_TOKEN=<TOKEN HERE>" without quotes.
+  config :nostrum, token: env!("DISCORD_TOKEN")
 
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

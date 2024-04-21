@@ -4,11 +4,12 @@ defmodule Bot.Core.CommandLoader do
   alias Nosedrum.Storage.Dispatcher
 
   @cmd_dir Path.join([File.cwd!(), "lib", "commands"])
-  @server_list Application.compile_env(:bot, :guild_ids)
 
   def load_commands() do
+    server_list = Application.get_env(:bot, :guild_ids)
+
     load_command_plugins()
-    |> register_commands()
+    |> register_commands(server_list)
 
     Logger.info("Commands loaded")
   end
@@ -21,13 +22,13 @@ defmodule Bot.Core.CommandLoader do
     end)
   end
 
-  defp register_commands(module_list) do
+  defp register_commands(module_list, server_list) do
     Enum.each(module_list, fn module ->
       Dispatcher.queue_command(module.name, module)
       Logger.debug("Added module #{module} as command /#{module.name}")
     end)
 
-    Enum.each(@server_list, fn server_id ->
+    Enum.each(server_list, fn server_id ->
       Dispatcher.process_queued_commands(server_id)
       Logger.debug("Successfully registered all commands to #{server_id}")
     end)

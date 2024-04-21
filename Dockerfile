@@ -16,7 +16,7 @@ RUN mix deps.get
 COPY config config
 COPY lib lib
 
-RUN mix release
+RUN MIX_ENV=prod mix release
 
 FROM elixir:alpine as runner
 RUN apk update && \
